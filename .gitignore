@@ -49,12 +49,6 @@ htmlcov/
 Thumbs.db
 desktop.ini
 
-# ==========================================
-# Project outputs (tự sinh khi chạy)
-# ==========================================
-outputs/figures/*.png
-outputs/tables/*.csv
-outputs/results.json
 
 # Nhưng GIỮ file .gitkeep để giữ cấu trúc thư mục
 !outputs/figures/.gitkeep

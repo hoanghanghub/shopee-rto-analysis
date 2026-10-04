@@ -1,0 +1,21 @@
+{
+  "base_case": {
+    "npv": 191937011.63580245,
+    "irr": 0.24556712665926517,
+    "payback_years": 2.0702118571714023
+  },
+  "monte_carlo": {
+    "n_iterations": 1000,
+    "npv_mean": 182547623.33248848,
+    "npv_median": 166561534.7761977,
+    "npv_std": 339163065.4354646,
+    "npv_min": -796397724.6895025,
+    "npv_max": 1565802572.6882834,
+    "prob_loss": 0.299,
+    "var_95": -383395638.15449494
+  },
+  "breakeven": {
+    "rto_reduction_threshold": 0.28941212017235257,
+    "prob_above_threshold": 0.717
+  }
+}
