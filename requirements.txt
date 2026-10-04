@@ -1,0 +1,18 @@
+# Core data analysis
+pandas==3.0.6
+numpy==2.5.3
+numpy-financial==1.1.0
+scipy==1.18.1
+
+# Excel reading
+openpyxl==3.1.5
+
+# Visualization
+matplotlib==3.11.2
+seaborn==0.13.2
+
+# Notebook (kham pha du lieu)
+jupyter==1.1.1
+
+# Testing
+pytest==9.0.1

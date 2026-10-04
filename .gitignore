@@ -1,0 +1,61 @@
+# ==========================================
+# Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ==========================================
+# Virtual Environment
+# ==========================================
+venv/
+env/
+ENV/
+.venv/
+
+# ==========================================
+# Jupyter Notebook
+# ==========================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ==========================================
+# Testing / Coverage
+# ==========================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ==========================================
+# IDE / Editor
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# Operating System
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# Project outputs (tự sinh khi chạy)
+# ==========================================
+outputs/figures/*.png
+outputs/tables/*.csv
+outputs/results.json
+
+# Nhưng GIỮ file .gitkeep để giữ cấu trúc thư mục
+!outputs/figures/.gitkeep
+!outputs/tables/.gitkeep
