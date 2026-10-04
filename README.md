@@ -1,119 +1,122 @@
 # Shopee Xpress RTO Reduction — Capital Budgeting & Monte Carlo
 
-Mô hình đánh giá quyết định đầu tư hệ thống xác nhận đơn hàng tự động qua
-Zalo OA kết hợp AI gợi ý khung giờ giao, nhằm giảm tỷ lệ Return-to-Origin
-(RTO) tại Shopee Xpress Việt Nam.
+A cash-flow model that evaluates whether an automated order-confirmation system
+(Zalo OA + AI delivery-time suggestions) is worth building at Shopee Xpress
+Vietnam. The goal is a measurable reduction in Return-to-Origin (RTO) — the
+single largest hidden cost in Vietnam's e-commerce logistics.
 
-**Vấn đề:** RTO là điểm nghẽn chi phí lớn của ngành TMĐT Việt Nam, đặc biệt
-với đơn COD. Mỗi đơn hoàn phát sinh phí ship chiều đi + chi phí phân loại
-lại tại kho — đều là chi phí chìm không thu hồi được. Nếu giảm được một
-phần tỷ lệ này bằng xác nhận đơn tự động, tác động lên dòng tiền là trực tiếp
-và đo lường được.
+## Why this matters
 
-**Điểm khác biệt:** Đây không phải bài toán vận hành. Toàn bộ hệ thống
-(Zalo OA + AI) được quy về một gói đầu tư duy nhất, có dòng tiền theo năm,
-có chi phí vốn, có rủi ro định lượng bằng phân phối xác suất.
+Every returned COD order costs money twice: the outbound shipping fee (already
+paid, never recovered) plus the labor to reclassify the parcel at the warehouse.
+At scale, this eats into margin faster than most operational metrics suggest.
 
-> Toàn bộ số liệu là giả định có căn cứ, dựa trên nguồn công khai. Không có
-> số liệu nội bộ nào của Shopee hay Shopee Xpress.
+This model treats the Zalo OA + AI system as a single capital investment with
+a 3-year cash flow, a cost of capital, and a probability distribution over
+outcomes — not as an operations project. The question isn't "does the system
+work?", it's "what reduction in RTO makes the investment break even, and how
+likely is that?"
+
+> All numbers are reasoned estimates from public sources. No internal Shopee
+> or Shopee Xpress data is used.
 
 ---
 
-## Kết quả
+## Results
 
-### Kịch bản cơ sở
+### Base case
 
-Với quy mô pilot ~45,900 đơn COD/tháng (0.1% tổng đơn Shopee VN), WACC 10%,
-vòng đời 3 năm:
+Pilot scope ~45,900 COD orders/month (0.1% of Shopee VN total), WACC 10%,
+3-year horizon:
 
-| Chỉ tiêu | Giá trị |
+| Metric | Value |
 |---|---|
-| CF₀ | 680,000,000 VNĐ |
-| NPV | **191,937,012 VNĐ** |
+| Initial investment (CF₀) | 680,000,000 VND |
+| NPV | **191,937,012 VND** |
 | IRR | **25.00%** |
-| Payback | **2.07 năm** |
+| Payback | **2.07 years** |
 
-### Monte Carlo (1,000 kịch bản)
+### Monte Carlo (1,000 scenarios)
 
-Hai biến ngẫu nhiên: mức giảm RTO (Beta) và quy mô đơn COD/tháng (Normal).
+Two random variables: RTO reduction rate (Beta) and monthly COD order volume
+(Normal).
 
-| Chỉ tiêu | Giá trị |
+| Metric | Value |
 |---|---|
 | P(NPV > 0) | **70.10%** |
 | P(NPV < 0) | 29.90% |
-| VaR 95% | **−383,395,638 VNĐ** |
-| NPV trung bình | 182,547,623 VNĐ |
-| NPV độ lệch chuẩn | 339,163,065 VNĐ |
-| **Ngưỡng hòa vốn (mức giảm RTO)** | **28.94%** |
-| Xác suất đạt ngưỡng | **71.70%** |
+| VaR 95% | **−383,395,638 VND** |
+| Mean NPV | 182,547,623 VND |
+| Std NPV | 339,163,065 VND |
+| **Break-even RTO reduction** | **28.94%** |
+| Probability of hitting break-even | **71.70%** |
 
-### Kết luận
+### Takeaway
 
-Ngưỡng hòa vốn là **28.94%**. Benchmark từ các case study trong khu vực
-(Dondy, Codrocket — WhatsApp/SMS COD confirmation) ghi nhận mức giảm
-30–40%. Xác suất đạt ngưỡng từ mô phỏng là 71.7%, cao hơn ngưỡng quyết
-định 50%.
+Break-even sits at a **28.94% reduction in RTO**. Published case studies from
+the region (Dondy, Codrocket — WhatsApp/SMS COD confirmation) report 30–40%
+reductions. Simulation puts the probability of clearing break-even at 71.7%,
+above the 50% decision threshold.
 
-→ **Đầu tư khả thi** với điều kiện: benchmark khu vực giữ được ở mức
-30–40%, và quy mô đơn COD không giảm xuống dưới ~30,000 đơn/tháng.
+→ **Investment is justified** if two conditions hold: regional benchmarks stay
+in the 30–40% range, and monthly COD volume does not drop below ~30,000 orders.
 
 ---
 
-## Phương pháp
+## Method
 
-### Lớp 1 — Capital Budgeting
+### Layer 1 — Capital Budgeting
 
-Bảng dòng tiền 3 năm:
+Three-year cash flow:
 
-- **CF₀** = 680M (phát triển AI + tích hợp API + đào tạo shipper)
-- **Cash Inflow** = Số đơn RTO giảm được × 28,000 VNĐ/đơn (chi phí ship
-  chiều đi + phân loại kho — phần thực sự tiết kiệm được)
-- **OpEx** = Gói Zalo OA 2.5M/năm + ZNS 300đ/tin × 1 tin/đơn
-- **Khấu hao** = CF₀ / 3 năm
-- **Chiết khấu** = WACC 10%/năm
+- **CF₀** = 680M VND (AI development + API integration + shipper training)
+- **Cash inflow** = prevented RTO orders × 28,000 VND/order. This is the
+  truly avoided cost — outbound shipping is still paid on every delivered
+  order, so only the return shipping + warehouse reclassification drop out.
+- **OpEx** = Zalo OA package (2.5M VND/year) + ZNS messages at 300 VND × 1
+  message/order
+- **Depreciation** = CF₀ / 3 years, straight-line
+- **Discount rate** = WACC 10%
 
-Lưu ý quan trọng: đơn không bị hoàn thì **vẫn phải trả phí ship chiều đi**.
-Phần tiết kiệm được chỉ là **chi phí chuyển hoàn + chi phí phân loại kho**
-(28,000 VNĐ/đơn), không phải toàn bộ 45,000 VNĐ chi phí tổn thất khi đơn
-bị hoàn.
+### Layer 2 — Monte Carlo
 
-### Lớp 2 — Monte Carlo
+1,000 scenarios, two random variables:
 
-Hai biến ngẫu nhiên, 1,000 kịch bản:
+- **RTO reduction** ~ Beta(α=7.61, β=14.14), mean 35%, anchored to regional
+  benchmarks
+- **Monthly COD volume** ~ Normal(μ=45,897, σ=10%μ)
 
-- **Mức giảm RTO** ~ Beta(α=7.61, β=14.14), mean 35%, neo vào benchmark
-  khu vực
-- **Quy mô đơn COD/tháng** ~ Normal(μ=45,897, σ=10%μ)
+Each scenario produces a full cash flow and NPV. The NPV distribution feeds
+VaR 95%, loss probability, and break-even estimation.
 
-Với mỗi cặp giá trị, dựng bảng dòng tiền và tính NPV. Kết quả dùng để tính
-VaR 95%, xác suất lỗ, và break-even.
+### Sensitivity
 
-### Sensitivity analysis
+Both variables enter the cash flow linearly, so one-way sensitivity gives
+identical impact ranges for each. The meaningful comparison is **relative
+uncertainty**:
 
-Cả hai biến đều nhân tuyến tính vào cash flow, nên sensitivity một chiều
-cho ra biên độ ảnh hưởng giống hệt nhau. Kết luận chuyển sang **rủi ro tương
-đối**:
-
-| Biến | Mean | Std | Hệ số biến thiên (CV) |
+| Variable | Mean | Std | Coefficient of variation |
 |---|---|---|---|
-| Mức giảm RTO | 0.35 | 0.10 | 28.6% |
-| Quy mô đơn COD | 45,897 | 4,590 | 10.0% |
+| RTO reduction | 0.35 | 0.10 | 28.6% |
+| Monthly COD volume | 45,897 | 4,590 | 10.0% |
 
-→ Mức giảm RTO có độ bất định cao gấp ~3 lần. Ưu tiên đầu tư vào **giảm bất
-định của mức giảm RTO** (pilot nhỏ để đo lường chính xác trước khi scale),
-không phải mở rộng quy mô đơn hàng.
-
----
-
-## Cấu trúc project
-
-Toàn bộ tham số nằm trong file Excel `data/raw/ShopeeXpress_RTO_Model.xlsx`.
+RTO reduction is roughly 3× more uncertain. The recommendation that follows:
+**invest first in reducing uncertainty around the RTO reduction estimate**
+(run a small pilot to measure it precisely before scaling), not in expanding
+order volume.
 
 ---
 
-## Cách chạy
+## Project structure
 
-Yêu cầu: Python 3.11+.
+Every parameter lives in the Excel file. No constants are hard-coded in Python —
+change the Excel, rerun `python main.py`, and every result updates.
+
+---
+
+## How to run
+
+Requires Python 3.11+.
 
 ```bash
 git clone https://github.com/hoanghanghub/shopee-rto-analysis.git
@@ -124,7 +127,7 @@ python -m venv venv
 # Windows
 venv\Scripts\activate
 
-# Mac/Linux
+# macOS / Linux
 source venv/bin/activate
 
 pip install -r requirements.txt
